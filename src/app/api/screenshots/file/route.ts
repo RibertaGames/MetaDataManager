@@ -9,12 +9,19 @@ const ANDROID_TYPES: Record<string, string> = {
   "10inch": "tenInchScreenshots",
 };
 
+const IOS_TYPES: Record<string, string> = {
+  iphone67: 'iPhone 6.7"',
+  iphone65: 'iPhone 6.5"',
+  iphone55: 'iPhone 5.5"',
+  ipad: "iPad Pro (6th gen)",
+};
+
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const projectId = searchParams.get("projectId");
   const platform = searchParams.get("platform");
   const lang = searchParams.get("lang");
-  const type = searchParams.get("type") ?? "phone";
+  const type = searchParams.get("type") ?? (platform === "ios" ? "iphone67" : "phone");
   const filename = searchParams.get("filename");
 
   if (!projectId || !platform || !lang || !filename) {
@@ -29,7 +36,9 @@ export async function GET(req: NextRequest) {
     const folderName = ANDROID_TYPES[type] ?? "phoneScreenshots";
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
-    dir = path.join(project.fastlanePath, "metadata", lang, "screenshots");
+    // iOS: fastlane/screenshots/{lang}/{device}/
+    const deviceFolder = IOS_TYPES[type] ?? 'iPhone 6.7"';
+    dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
   }
 
   const filePath = path.join(dir, filename);

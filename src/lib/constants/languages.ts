@@ -6,8 +6,8 @@ export interface LanguageEntry {
 }
 
 export const LANGUAGES: LanguageEntry[] = [
-  { label: "English (US)", ios: "en-US",   android: "en-US",  deepl: "EN-US"   },
   { label: "日本語",        ios: "ja",      android: "ja-JP",  deepl: "JA"      },
+  { label: "English (US)", ios: "en-US",   android: "en-US",  deepl: "EN-US"   },
   { label: "한국어",        ios: "ko",      android: "ko-KR",  deepl: "KO"      },
   { label: "中文(简体)",    ios: "zh-Hans", android: "zh-CN",  deepl: "ZH"      },
   { label: "中文(繁體)",    ios: "zh-Hant", android: "zh-TW",  deepl: "ZH-HANT" },
