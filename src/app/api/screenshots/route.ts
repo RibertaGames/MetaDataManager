@@ -11,9 +11,9 @@ const ANDROID_TYPES: Record<string, string> = {
 
 // fastlane deliver が使うiOSデバイスフォルダ名
 const IOS_TYPES: Record<string, string> = {
-  iphone67: 'iPhone 6.7"',
-  iphone65: 'iPhone 6.5"',
-  iphone55: 'iPhone 5.5"',
+  iphone67: "iPhone 6.7",
+  iphone65: "iPhone 6.5",
+  iphone55: "iPhone 5.5",
   ipad: "iPad Pro (6th gen)",
 };
 
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
     // iOS: fastlane/screenshots/{lang}/{device}/
-    const deviceFolder = IOS_TYPES[type] ?? 'iPhone 6.7"';
+    const deviceFolder = IOS_TYPES[type] ?? "iPhone 6.7";
     dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
   }
 
@@ -71,7 +71,7 @@ export async function DELETE(req: NextRequest) {
     const folderName = ANDROID_TYPES[type] ?? "phoneScreenshots";
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
-    const deviceFolder = IOS_TYPES[type] ?? 'iPhone 6.7"';
+    const deviceFolder = IOS_TYPES[type] ?? "iPhone 6.7";
     dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
   }
 

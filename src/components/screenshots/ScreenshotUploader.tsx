@@ -87,11 +87,21 @@ export default function ScreenshotUploader({ projectId, platform, lang, type, on
           sourcePaths: Array.from(selected),
         }),
       });
-      const data = await res.json();
+
+      if (!res.ok) {
+        setError(`コピーに失敗しました: ${res.status}`);
+        return;
+      }
+
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : {};
       setDoneCount(data.copied ?? 0);
       setTimeout(() => {
         onDone();
       }, 1000);
+    } catch (err) {
+      setError("コピー中にエラーが発生しました");
+      console.error(err);
     } finally {
       setCopying(false);
     }

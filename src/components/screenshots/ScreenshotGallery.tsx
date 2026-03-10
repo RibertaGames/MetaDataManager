@@ -34,6 +34,18 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
   const [enlarged, setEnlarged] = useState<string | null>(null);
   const [showUploader, setShowUploader] = useState(false);
 
+  // プラットフォーム切り替え時に言語とデバイスタイプを更新
+  useEffect(() => {
+    const currentLangEntry = LANGUAGES.find(l =>
+      l.ios === lang || l.android === lang
+    );
+    if (currentLangEntry) {
+      const newLang = platform === "ios" ? currentLangEntry.ios : currentLangEntry.android;
+      setLang(newLang);
+    }
+    setType(platform === "ios" ? "iphone67" : "phone");
+  }, [platform]);
+
   function loadScreenshots() {
     setLoading(true);
     fetch(`/api/screenshots?projectId=${projectId}&platform=${platform}&lang=${lang}&type=${type}`)
