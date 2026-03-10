@@ -33,6 +33,8 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
   const [loading, setLoading] = useState(false);
   const [enlarged, setEnlarged] = useState<string | null>(null);
   const [showUploader, setShowUploader] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [reordering, setReordering] = useState(false);
 
   // プラットフォーム切り替え時に言語とデバイスタイプを更新
   useEffect(() => {
@@ -57,6 +59,54 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
   useEffect(() => {
     loadScreenshots();
   }, [projectId, platform, lang, type]);
+
+  function handleDragStart(index: number) {
+    setDraggedIndex(index);
+  }
+
+  function handleDragOver(e: React.DragEvent, index: number) {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newScreenshots = [...screenshots];
+    const draggedItem = newScreenshots[draggedIndex];
+    newScreenshots.splice(draggedIndex, 1);
+    newScreenshots.splice(index, 0, draggedItem);
+
+    setScreenshots(newScreenshots);
+    setDraggedIndex(index);
+  }
+
+  function handleDragEnd() {
+    setDraggedIndex(null);
+  }
+
+  async function saveOrder() {
+    setReordering(true);
+    try {
+      const orderedFilenames = screenshots.map(s => s.filename);
+      const res = await fetch("/api/screenshots/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId,
+          platform,
+          lang,
+          type,
+          orderedFilenames,
+        }),
+      });
+
+      if (!res.ok) {
+        alert("並び替えに失敗しました");
+        return;
+      }
+
+      loadScreenshots();
+    } finally {
+      setReordering(false);
+    }
+  }
 
   return (
     <div>
@@ -96,12 +146,23 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => setShowUploader(true)}
-          className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition font-medium"
-        >
-          + 追加
-        </button>
+        <div className="flex gap-2">
+          {screenshots.length > 0 && (
+            <button
+              onClick={saveOrder}
+              disabled={reordering}
+              className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 transition font-medium"
+            >
+              {reordering ? "保存中..." : "並び順を保存"}
+            </button>
+          )}
+          <button
+            onClick={() => setShowUploader(true)}
+            className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition font-medium"
+          >
+            + 追加
+          </button>
+        </div>
       </div>
 
       {/* ギャラリー */}
@@ -113,11 +174,20 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {screenshots.map((s) => (
+          {screenshots.map((s, index) => (
             <div
               key={s.filename}
-              className="border rounded-lg overflow-hidden hover:shadow-md transition group relative"
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDragEnd={handleDragEnd}
+              className={`border rounded-lg overflow-hidden hover:shadow-md transition group relative cursor-move ${
+                draggedIndex === index ? "opacity-50" : ""
+              }`}
             >
+              <div className="absolute top-2 left-2 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold z-10">
+                {index + 1}
+              </div>
               <div
                 className="relative aspect-[9/16] bg-gray-100 cursor-pointer"
                 onClick={() => setEnlarged(s.url)}
