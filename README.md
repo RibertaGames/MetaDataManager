@@ -2,7 +2,7 @@
 
 App Store / Google Play のメタデータを効率的に管理するWebアプリケーションです。fastlaneプロジェクトのメタデータフォルダを直感的に編集できます。
 
-![MetaDataManager](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/main/docs/screenshot.png)
+![MetaDataManager](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/develop/docs/screenshot.png)
 
 ## 特徴
 
