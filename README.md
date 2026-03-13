@@ -4,13 +4,10 @@ App Store / Google Play のメタデータを効率的に管理するWebアプ�
 
 ## スクリーンショット
 
-### プロジェクト管理
-![プロジェクト管理](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/develop/docs/screenshot-projects.png)
-
-### iOS メタデータ編集（多言語対応）
+### メタデータ編集（多言語対応）
 ![iOS メタデータ編集](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/develop/docs/screenshot-ios.png)
 
-### スクリーンショット管理（Android）
+### スクリーンショット管理
 ![スクリーンショット管理](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/develop/docs/screenshot-screenshots.png)
 
 ## 特徴
