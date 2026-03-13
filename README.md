@@ -142,11 +142,11 @@ MIT License - 詳細は [LICENSE](LICENSE) を参照してください。
 
 ## 作者
 
-**TechRiberta** - [株式会社テックリベルタ](https://techriberta.com)
+**TechRiberta** - [株式会社テックリベルタ](https://techriberta.co.jp)
 
 ## リンク
 
-- [公式サイト](https://techriberta.com)
+- [公式サイト](https://techriberta.co.jp)
 - [Twitter](https://x.com/TechRiberta)
 - [GitHub](https://github.com/RibertaGames)
 
