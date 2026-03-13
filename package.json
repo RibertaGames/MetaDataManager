@@ -1,7 +1,22 @@
 {
   "name": "metadata-manager",
   "version": "0.1.0",
-  "private": true,
+  "description": "App Store / Google Play metadata management tool for fastlane projects",
+  "author": "TechRiberta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RibertaGames/MetaDataManager.git"
+  },
+  "keywords": [
+    "fastlane",
+    "metadata",
+    "app-store",
+    "google-play",
+    "ios",
+    "android",
+    "nextjs"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

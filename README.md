@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MetaDataManager
 
-## Getting Started
+App Store / Google Play のメタデータを効率的に管理するWebアプリケーションです。fastlaneプロジェクトのメタデータフォルダを直感的に編集できます。
 
-First, run the development server:
+![MetaDataManager](https://raw.githubusercontent.com/RibertaGames/MetaDataManager/main/docs/screenshot.png)
+
+## 特徴
+
+- 📱 **iOS/Android対応** - App StoreとGoogle Play両方のメタデータを管理
+- 🚀 **fastlane統合** - 既存のfastlaneプロジェクトと完全統合
+- 🌍 **多言語対応** - 複数言語のメタデータを一元管理
+- 💾 **自動保存** - 変更を自動的にfastlaneメタデータフォルダに保存
+- 🎨 **直感的なUI** - モダンで使いやすいインターフェース
+- 📁 **プロジェクト管理** - 複数のfastlaneプロジェクトを切り替えて管理
+
+## 技術スタック
+
+- **Next.js 16** - Reactフレームワーク
+- **TypeScript** - 型安全な開発
+- **Tailwind CSS 4** - モダンなUIデザイン
+- **PapaParse** - CSV/TSVファイルの読み書き
+
+## インストール
+
+### 必要要件
+
+- Node.js 20以上
+- npm または yarn
+- fastlaneがセットアップされたプロジェクト
+
+### セットアップ
 
 ```bash
+# リポジトリをクローン
+git clone https://github.com/RibertaGames/MetaDataManager.git
+cd MetaDataManager/metadata-manager
+
+# 依存関係をインストール
+npm install
+
+# 開発サーバーを起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開きます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 使い方
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. プロジェクトを追加
 
-## Learn More
+1. 「+ 新しいプロジェクト」をクリック
+2. プロジェクト名を入力
+3. fastlaneフォルダのパスを指定（`metadata/`フォルダが含まれるディレクトリ）
+4. 「追加」をクリック
 
-To learn more about Next.js, take a look at the following resources:
+### 2. メタデータを編集
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. プロジェクト一覧から編集したいプロジェクトをクリック
+2. iOS または Android タブを選択
+3. 言語を選択
+4. メタデータを編集
+5. 変更は自動的に保存されます
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. サポートされるメタデータ
 
-## Deploy on Vercel
+#### iOS (App Store Connect)
+- アプリ名
+- サブタイトル
+- 説明文
+- キーワード
+- プロモーションテキスト
+- リリースノート
+- マーケティングURL
+- サポートURL
+- プライバシーポリシーURL
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Android (Google Play Console)
+- アプリ名
+- 簡単な説明
+- 詳細な説明
+- リリースノート
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## フォルダ構造
+
+```
+metadata-manager/
+├── src/
+│   ├── app/              # Next.js App Router
+│   │   ├── api/          # APIルート
+│   │   ├── [projectId]/  # プロジェクト詳細ページ
+│   │   ├── projects/     # プロジェクト一覧
+│   │   └── settings/     # 設定ページ
+│   ├── components/       # Reactコンポーネント
+│   ├── lib/             # ユーティリティ関数
+│   └── types/           # TypeScript型定義
+├── public/              # 静的ファイル
+└── data/                # プロジェクトデータ（JSON）
+```
+
+## 開発
+
+```bash
+# 開発サーバー起動
+npm run dev
+
+# 本番ビルド
+npm run build
+
+# 本番サーバー起動
+npm start
+```
+
+## ライセンス
+
+MIT License - 詳細は [LICENSE](LICENSE) を参照してください。
+
+## 作者
+
+**TechRiberta** - [株式会社テックリベルタ](https://techriberta.com)
+
+## リンク
+
+- [公式サイト](https://techriberta.com)
+- [Twitter](https://x.com/TechRiberta)
+- [GitHub](https://github.com/RibertaGames)
+
+## 貢献
+
+プルリクエストを歓迎します！大きな変更の場合は、まずissueを開いて変更内容を議論してください。
+
+## サポート
+
+問題や質問がある場合は、[Issue](https://github.com/RibertaGames/MetaDataManager/issues)を開いてください。
