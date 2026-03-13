@@ -53,6 +53,16 @@ npm run dev
 
 ブラウザで [http://localhost:3000](http://localhost:3000) を開きます。
 
+### DeepL API設定（翻訳機能を使用する場合）
+
+翻訳機能を使用する場合は、DeepL APIキーが必要です：
+
+1. [DeepL API](https://www.deepl.com/ja/pro-api)でAPIキーを取得（無料プランあり）
+2. アプリ内の「設定」ページからAPIキーを入力
+3. 「無料プランのAPIを使用する」にチェック（無料プランの場合）
+
+**注意**: APIキーは`data/settings.json`にローカル保存されます。このファイルはGitで管理されません。
+
 ## 使い方
 
 ### 1. プロジェクトを追加
@@ -118,6 +128,16 @@ npm run build
 # 本番サーバー起動
 npm start
 ```
+
+## セキュリティ
+
+### APIキーの管理
+
+- DeepL APIキーは`data/settings.json`にローカル保存されます
+- `data/`フォルダは`.gitignore`に含まれており、Gitで管理されません
+- APIキーは絶対にGitHubにコミットしないでください
+
+詳細は [SECURITY.md](SECURITY.md) を参照してください。
 
 ## ライセンス
 
