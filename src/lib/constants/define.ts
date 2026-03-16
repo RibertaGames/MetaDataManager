@@ -70,13 +70,13 @@ export const ANDROID_SCREENSHOT_TYPES: Record<string, string> = {
  * Apple の最新要件に準拠（"inch" サフィックス必須）
  */
 export const IOS_SCREENSHOT_TYPES: Record<string, string> = {
-  iphone67: "iPhone 6.7 inch",
-  iphone65: "iPhone 6.5 inch",
-  iphone55: "iPhone 5.5 inch",
-  ipad: "iPad Pro (6th gen)",
+  iphone67: "app_iphone_67",
+  iphone65: "app_iphone_65",
+  iphone55: "app_iphone_55",
+  ipad: "app_ipad_pro",
 };
 
-export const DEFAULT_IOS_SCREENSHOT_TYPE = "iphone67";
+export const DEFAULT_IOS_SCREENSHOT_TYPE = "iphone65";
 export const DEFAULT_ANDROID_SCREENSHOT_TYPE = "phone";
 
 export const DEFAULT_IOS_SCREENSHOT_FOLDER = IOS_SCREENSHOT_TYPES[DEFAULT_IOS_SCREENSHOT_TYPE];
