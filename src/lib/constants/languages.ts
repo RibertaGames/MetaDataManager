@@ -14,12 +14,12 @@ export const LANGUAGES: LanguageEntry[] = [
   { label: "Deutsch",       ios: "de-DE",   android: "de-DE",  deepl: "DE"      },
   { label: "Español",       ios: "es-ES",   android: "es-ES",  deepl: "ES"      },
   { label: "Français",      ios: "fr-FR",   android: "fr-FR",  deepl: "FR"      },
-  { label: "Bahasa Indonesia", ios: "id",   android: "id-ID",  deepl: "ID"      },
+  { label: "Bahasa Indonesia", ios: "id",   android: "id",     deepl: "ID"      },
   { label: "Italiano",      ios: "it",      android: "it-IT",  deepl: "IT"      },
   { label: "Português",     ios: "pt-PT",   android: "pt-PT",  deepl: "PT-PT"   },
   { label: "Русский",       ios: "ru",      android: "ru-RU",  deepl: "RU"      },
-  { label: "ภาษาไทย",       ios: "th",      android: "th-TH",  deepl: "TH"      },
-  { label: "Tiếng Việt",    ios: "vi",      android: "vi-VN",  deepl: "VI"      },
+  { label: "ภาษาไทย",       ios: "th",      android: "th",     deepl: "TH"      },
+  { label: "Tiếng Việt",    ios: "vi",      android: "vi",     deepl: "VI"      },
 ];
 
 export const IOS_LANGS = LANGUAGES.map((l) => l.ios);
