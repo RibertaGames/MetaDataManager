@@ -2,20 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { getProject } from "@/lib/fs/projectStore";
-
-const ANDROID_TYPES: Record<string, string> = {
-  phone: "phoneScreenshots",
-  "7inch": "sevenInchScreenshots",
-  "10inch": "tenInchScreenshots",
-};
-
-// fastlane deliver が使うiOSデバイスフォルダ名
-const IOS_TYPES: Record<string, string> = {
-  iphone67: "iPhone 6.7",
-  iphone65: "iPhone 6.5",
-  iphone55: "iPhone 5.5",
-  ipad: "iPad Pro (6th gen)",
-};
+import {
+  ANDROID_SCREENSHOT_TYPES,
+  IOS_SCREENSHOT_TYPES,
+  DEFAULT_IOS_SCREENSHOT_FOLDER,
+  DEFAULT_ANDROID_SCREENSHOT_FOLDER,
+} from "@/lib/constants/define";
 
 export async function GET(req: NextRequest) {
   const projectId = req.nextUrl.searchParams.get("projectId");
@@ -32,11 +24,11 @@ export async function GET(req: NextRequest) {
 
   let dir: string;
   if (platform === "android") {
-    const folderName = ANDROID_TYPES[type] ?? "phoneScreenshots";
+    const folderName = ANDROID_SCREENSHOT_TYPES[type] ?? DEFAULT_ANDROID_SCREENSHOT_FOLDER;
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
     // iOS: fastlane/screenshots/{lang}/{device}/
-    const deviceFolder = IOS_TYPES[type] ?? "iPhone 6.7";
+    const deviceFolder = IOS_SCREENSHOT_TYPES[type] ?? DEFAULT_IOS_SCREENSHOT_FOLDER;
     dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
   }
 
@@ -68,10 +60,10 @@ export async function DELETE(req: NextRequest) {
 
   let dir: string;
   if (platform === "android") {
-    const folderName = ANDROID_TYPES[type] ?? "phoneScreenshots";
+    const folderName = ANDROID_SCREENSHOT_TYPES[type] ?? DEFAULT_ANDROID_SCREENSHOT_FOLDER;
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
-    const deviceFolder = IOS_TYPES[type] ?? "iPhone 6.7";
+    const deviceFolder = IOS_SCREENSHOT_TYPES[type] ?? DEFAULT_IOS_SCREENSHOT_FOLDER;
     dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
   }
 

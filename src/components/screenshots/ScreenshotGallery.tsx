@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { LANGUAGES } from "@/lib/constants/languages";
+import { LANGUAGES } from "@/lib/constants/define";
 import ScreenshotUploader from "./ScreenshotUploader";
 
 interface Screenshot { filename: string; url: string; }

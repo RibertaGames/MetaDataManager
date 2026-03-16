@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { MetadataFields } from "@/types/metadata";
-import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/iosFields";
-import { ANDROID_FIELDS } from "@/lib/constants/androidFields";
+import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/define";
+import { ANDROID_FIELDS } from "@/lib/constants/define";
 
 function writeTxt(filePath: string, content: string) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });

@@ -1,4 +1,4 @@
-import { ANDROID_FIELDS } from "@/lib/constants/androidFields";
+import { ANDROID_FIELDS } from "@/lib/constants/define";
 import MetadataEditor from "@/components/metadata/MetadataEditor";
 
 export default async function AndroidPage({ params }: { params: Promise<{ projectId: string }> }) {

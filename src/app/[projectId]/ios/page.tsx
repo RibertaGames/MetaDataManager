@@ -1,4 +1,4 @@
-import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/iosFields";
+import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/define";
 import MetadataEditor from "@/components/metadata/MetadataEditor";
 
 export default async function IosPage({ params }: { params: Promise<{ projectId: string }> }) {

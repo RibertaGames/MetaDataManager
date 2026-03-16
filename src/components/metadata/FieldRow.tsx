@@ -1,6 +1,6 @@
 "use client";
-import { FieldDef } from "@/lib/constants/iosFields";
-import { LANGUAGES, IOS_TO_DEEPL, ANDROID_TO_DEEPL } from "@/lib/constants/languages";
+import { FieldDef } from "@/lib/constants/define";
+import { LANGUAGES, IOS_TO_DEEPL, ANDROID_TO_DEEPL } from "@/lib/constants/define";
 import { showToast } from "@/components/common/Toast";
 
 interface Props {
