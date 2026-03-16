@@ -17,3 +17,8 @@ export const IOS_FIELDS: FieldDef[] = [
   { key: "support_url",      label: "サポートURL",            maxLength: null, multiline: false },
   { key: "marketing_url",    label: "マーケティングURL",      maxLength: null, multiline: false },
 ];
+
+// グローバルフィールド（言語に依存しない）
+export const IOS_GLOBAL_FIELDS: FieldDef[] = [
+  { key: "copyright",        label: "著作権",                 maxLength: 100,  multiline: false },
+];

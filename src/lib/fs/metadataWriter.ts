@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { MetadataFields } from "@/types/metadata";
-import { IOS_FIELDS } from "@/lib/constants/iosFields";
+import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/iosFields";
 import { ANDROID_FIELDS } from "@/lib/constants/androidFields";
 
 function writeTxt(filePath: string, content: string) {
@@ -10,6 +10,7 @@ function writeTxt(filePath: string, content: string) {
 }
 
 export function writeIosMetadata(fastlanePath: string, fields: MetadataFields) {
+  // 言語別フィールド
   for (const field of IOS_FIELDS) {
     const langMap = fields[field.key];
     if (!langMap) continue;
@@ -17,6 +18,15 @@ export function writeIosMetadata(fastlanePath: string, fields: MetadataFields) {
       const filePath = path.join(fastlanePath, "metadata", lang, `${field.key}.txt`);
       writeTxt(filePath, value);
     }
+  }
+
+  // グローバルフィールド
+  for (const field of IOS_GLOBAL_FIELDS) {
+    const langMap = fields[field.key];
+    if (!langMap) continue;
+    const value = langMap.global || "";
+    const filePath = path.join(fastlanePath, "metadata", `${field.key}.txt`);
+    writeTxt(filePath, value);
   }
 }
 

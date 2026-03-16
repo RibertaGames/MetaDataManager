@@ -10,9 +10,10 @@ interface Props {
   projectId: string;
   platform: "ios" | "android";
   fields: FieldDef[];
+  globalFields?: FieldDef[];
 }
 
-export default function MetadataEditor({ projectId, platform, fields }: Props) {
+export default function MetadataEditor({ projectId, platform, fields, globalFields = [] }: Props) {
   const [values, setValues] = useState<MetadataFields>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -174,7 +175,31 @@ export default function MetadataEditor({ projectId, platform, fields }: Props) {
         </button>
       </div>
 
-      {/* フィールド一覧 */}
+      {/* グローバルフィールド */}
+      {globalFields.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">📝 共通設定</h2>
+          {globalFields.map((field) => (
+            <div key={field.key} className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {field.label}
+                {field.maxLength && <span className="text-xs text-gray-500 ml-2">（最大{field.maxLength}文字）</span>}
+              </label>
+              <input
+                type="text"
+                value={values[field.key]?.global ?? ""}
+                onChange={(e) => handleChange(field.key, "global", e.target.value)}
+                maxLength={field.maxLength ?? undefined}
+                placeholder={`例: ${field.key === "copyright" ? "2026 RibertaGames" : ""}`}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 言語別フィールド */}
+      <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">🌍 言語別メタデータ</h2>
       {fields.map((field) => (
         <FieldRow
           key={field.key}

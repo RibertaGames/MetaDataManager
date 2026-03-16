@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { MetadataFields } from "@/types/metadata";
-import { IOS_FIELDS } from "@/lib/constants/iosFields";
+import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/iosFields";
 import { ANDROID_FIELDS } from "@/lib/constants/androidFields";
 import { IOS_LANGS, ANDROID_LANGS } from "@/lib/constants/languages";
 
@@ -12,6 +12,8 @@ function readTxt(filePath: string): string {
 
 export function readIosMetadata(fastlanePath: string): MetadataFields {
   const fields: MetadataFields = {};
+
+  // 言語別フィールド
   for (const field of IOS_FIELDS) {
     fields[field.key] = {};
     for (const lang of IOS_LANGS) {
@@ -19,6 +21,15 @@ export function readIosMetadata(fastlanePath: string): MetadataFields {
       fields[field.key][lang] = readTxt(filePath);
     }
   }
+
+  // グローバルフィールド
+  for (const field of IOS_GLOBAL_FIELDS) {
+    const filePath = path.join(fastlanePath, "metadata", `${field.key}.txt`);
+    const value = readTxt(filePath);
+    // グローバルフィールドは "global" キーに保存
+    fields[field.key] = { global: value };
+  }
+
   return fields;
 }
 
