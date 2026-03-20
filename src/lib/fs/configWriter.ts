@@ -15,12 +15,32 @@ function writeTxt(filePath: string, content: string) {
 export function writeIosConfig(
   fastlanePath: string,
   config: {
+    category: Record<string, string>;
     reviewInfo: Record<string, string>;
     deliverfile: Record<string, string | number | boolean>;
     submission: Record<string, boolean>;
     ageRating: Record<string, number>;
   }
 ) {
+  // カテゴリフィールドを書き込み
+  const metadataPath = path.join(fastlanePath, "metadata");
+  ensureDir(metadataPath);
+
+  const categoryFields = [
+    "primary_category",
+    "secondary_category",
+    "primary_first_sub_category",
+    "primary_second_sub_category",
+    "secondary_first_sub_category",
+    "secondary_second_sub_category",
+  ];
+
+  for (const field of categoryFields) {
+    const filePath = path.join(metadataPath, `${field}.txt`);
+    const value = config.category[field] ?? "";
+    writeTxt(filePath, value);
+  }
+
   // 審査担当者向け連絡先情報を書き込み
   const reviewInfoPath = path.join(fastlanePath, "metadata", "review_information");
   ensureDir(reviewInfoPath);
@@ -48,12 +68,17 @@ export function writeIosConfig(
   // 基本設定
   const submitForReview = config.deliverfile.submit_for_review ?? false;
   const automaticRelease = config.deliverfile.automatic_release ?? true;
+  const phasedRelease = config.deliverfile.phased_release ?? false;
   const priceTier = config.deliverfile.price_tier ?? 0;
   const thirdPartyContent = config.deliverfile.content_rights_contains_third_party_content ?? false;
   const hasRights = config.deliverfile.content_rights_has_rights ?? true;
 
   deliverfileContent += `submit_for_review ${submitForReview}\n`;
   deliverfileContent += `automatic_release ${automaticRelease}\n`;
+  if (phasedRelease) {
+    deliverfileContent += `# 段階的リリース（7日間で段階的に配信）\n`;
+    deliverfileContent += `phased_release ${phasedRelease}\n`;
+  }
   deliverfileContent += `# CI/CD環境では force: true が必要（確認プロンプトをスキップ）\n`;
   deliverfileContent += `# run_precheck_before_submit: true により検証は実行される\n`;
   deliverfileContent += `force true\n`;

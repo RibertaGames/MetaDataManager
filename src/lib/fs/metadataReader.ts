@@ -22,12 +22,12 @@ export function readIosMetadata(fastlanePath: string): MetadataFields {
     }
   }
 
-  // グローバルフィールド
-  for (const field of IOS_GLOBAL_FIELDS) {
-    const filePath = path.join(fastlanePath, "metadata", `${field.key}.txt`);
+  // グローバルフィールド（copyright のみ。カテゴリはconfig側で管理）
+  const copyrightField = IOS_GLOBAL_FIELDS.find(f => f.key === "copyright");
+  if (copyrightField) {
+    const filePath = path.join(fastlanePath, "metadata", `${copyrightField.key}.txt`);
     const value = readTxt(filePath);
-    // グローバルフィールドは "global" キーに保存
-    fields[field.key] = { global: value };
+    fields[copyrightField.key] = { global: value };
   }
 
   return fields;

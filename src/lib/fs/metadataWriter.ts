@@ -20,13 +20,15 @@ export function writeIosMetadata(fastlanePath: string, fields: MetadataFields) {
     }
   }
 
-  // グローバルフィールド
-  for (const field of IOS_GLOBAL_FIELDS) {
-    const langMap = fields[field.key];
-    if (!langMap) continue;
-    const value = langMap.global || "";
-    const filePath = path.join(fastlanePath, "metadata", `${field.key}.txt`);
-    writeTxt(filePath, value);
+  // グローバルフィールド（copyright のみ。カテゴリはconfig側で管理）
+  const copyrightField = IOS_GLOBAL_FIELDS.find(f => f.key === "copyright");
+  if (copyrightField) {
+    const langMap = fields[copyrightField.key];
+    if (langMap) {
+      const value = langMap.global || "";
+      const filePath = path.join(fastlanePath, "metadata", `${copyrightField.key}.txt`);
+      writeTxt(filePath, value);
+    }
   }
 }
 

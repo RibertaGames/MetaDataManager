@@ -7,6 +7,24 @@ function readTxt(filePath: string): string {
 }
 
 export function readIosConfig(fastlanePath: string) {
+  // カテゴリフィールド
+  const metadataPath = path.join(fastlanePath, "metadata");
+  const category: Record<string, string> = {};
+
+  const categoryFields = [
+    "primary_category",
+    "secondary_category",
+    "primary_first_sub_category",
+    "primary_second_sub_category",
+    "secondary_first_sub_category",
+    "secondary_second_sub_category",
+  ];
+
+  for (const field of categoryFields) {
+    const filePath = path.join(metadataPath, `${field}.txt`);
+    category[field] = readTxt(filePath);
+  }
+
   // 審査担当者向け連絡先情報
   const reviewInfoPath = path.join(fastlanePath, "metadata", "review_information");
   const reviewInfo: Record<string, string> = {};
@@ -43,6 +61,7 @@ export function readIosConfig(fastlanePath: string) {
     const boolFields = [
       "submit_for_review",
       "automatic_release",
+      "phased_release",
       "content_rights_contains_third_party_content",
       "content_rights_has_rights",
     ];
@@ -96,7 +115,7 @@ export function readIosConfig(fastlanePath: string) {
     }
   }
 
-  return { reviewInfo, deliverfile, submission, ageRating };
+  return { category, reviewInfo, deliverfile, submission, ageRating };
 }
 
 export function readAndroidConfig(fastlanePath: string) {

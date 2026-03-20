@@ -15,13 +15,13 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { projectId, reviewInfo, deliverfile, submission, ageRating } = await req.json();
+  const { projectId, category, reviewInfo, deliverfile, submission, ageRating } = await req.json();
   if (!projectId)
     return NextResponse.json({ error: "projectId は必須です" }, { status: 400 });
 
   const project = getProject(projectId);
   if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
 
-  writeIosConfig(project.fastlanePath, { reviewInfo, deliverfile, submission, ageRating });
+  writeIosConfig(project.fastlanePath, { category, reviewInfo, deliverfile, submission, ageRating });
   return NextResponse.json({ ok: true });
 }

@@ -114,13 +114,26 @@ export const IOS_FIELDS: FieldDef[] = [
   { key: "privacy_url",      label: "プライバシーURL",        maxLength: null, multiline: false },
   { key: "support_url",      label: "サポートURL",            maxLength: null, multiline: false },
   { key: "marketing_url",    label: "マーケティングURL",      maxLength: null, multiline: false },
+  { key: "apple_tv_privacy_policy", label: "Apple TVプライバシーURL", maxLength: null, multiline: false },
 ];
 
 /**
- * iOS グローバルフィールド（言語に依存しない）
+ * iOS グローバルフィールド（言語に依存しない）- メタデータページ用
  */
 export const IOS_GLOBAL_FIELDS: FieldDef[] = [
   { key: "copyright",        label: "著作権",                 maxLength: 100,  multiline: false },
+];
+
+/**
+ * iOS カテゴリフィールド - 設定ページ用
+ */
+export const IOS_CATEGORY_FIELDS: FieldDef[] = [
+  { key: "primary_category", label: "主カテゴリ",             maxLength: null, multiline: false },
+  { key: "secondary_category", label: "副カテゴリ（任意）",   maxLength: null, multiline: false },
+  { key: "primary_first_sub_category", label: "主カテゴリ サブ1（任意）", maxLength: null, multiline: false },
+  { key: "primary_second_sub_category", label: "主カテゴリ サブ2（任意）", maxLength: null, multiline: false },
+  { key: "secondary_first_sub_category", label: "副カテゴリ サブ1（任意）", maxLength: null, multiline: false },
+  { key: "secondary_second_sub_category", label: "副カテゴリ サブ2（任意）", maxLength: null, multiline: false },
 ];
 
 /**
@@ -188,9 +201,10 @@ export const DEEPL_API_ENDPOINT_PRO = "https://api.deepl.com/v2/translate";
  * iOS Deliverfile 基本設定
  */
 export const IOS_DELIVERFILE_CONFIG: ConfigFieldDef[] = [
-  { key: "price_tier", label: "価格帯", type: "number", description: "0 = 無料", min: 0, max: 87 },
+  { key: "price_tier", label: "価格帯", type: "number", description: "0 = 無料、1-87 = 有料", min: 0, max: 87 },
   { key: "submit_for_review", label: "審査に自動提出", type: "boolean", description: "アップロード後に自動的に審査に提出" },
-  { key: "automatic_release", label: "承認後に自動リリース", type: "boolean", description: "審査承認後に自動的にリリース" },
+  { key: "automatic_release", label: "承認後に自動リリース", type: "boolean", description: "審査承認後に自動的にリリース（段階的リリースと併用不可）" },
+  { key: "phased_release", label: "段階的リリース（7日間）", type: "boolean", description: "7日間かけて段階的に配信（自動リリースと併用不可）" },
   { key: "content_rights_contains_third_party_content", label: "サードパーティコンテンツを含む", type: "boolean", description: "広告、ユーザー生成コンテンツなど" },
   { key: "content_rights_has_rights", label: "配信権を保有", type: "boolean", description: "コンテンツの配信権を保有している" },
 ];
@@ -283,4 +297,86 @@ export const IOS_AGE_RATING: ConfigFieldDef[] = [
     { value: 1, label: "まれ/軽度" },
     { value: 2, label: "頻繁/激しい" },
   ]},
+];
+
+// ============================================
+// App Store カテゴリ定義
+// ============================================
+
+/**
+ * iOS App Store 主カテゴリ一覧
+ */
+export const IOS_PRIMARY_CATEGORIES = [
+  { value: "", label: "未選択" },
+  { value: "BUSINESS", label: "ビジネス" },
+  { value: "BOOKS", label: "ブック" },
+  { value: "DEVELOPER_TOOLS", label: "開発ツール" },
+  { value: "EDUCATION", label: "教育" },
+  { value: "ENTERTAINMENT", label: "エンターテインメント" },
+  { value: "FINANCE", label: "ファイナンス" },
+  { value: "FOOD_AND_DRINK", label: "フード＆ドリンク" },
+  { value: "GAMES", label: "ゲーム" },
+  { value: "GRAPHICS_AND_DESIGN", label: "グラフィック＆デザイン" },
+  { value: "HEALTH_AND_FITNESS", label: "ヘルスケア＆フィットネス" },
+  { value: "LIFESTYLE", label: "ライフスタイル" },
+  { value: "MAGAZINES_AND_NEWSPAPERS", label: "雑誌＆新聞" },
+  { value: "MEDICAL", label: "メディカル" },
+  { value: "MUSIC", label: "ミュージック" },
+  { value: "NAVIGATION", label: "ナビゲーション" },
+  { value: "NEWS", label: "ニュース" },
+  { value: "PHOTO_AND_VIDEO", label: "写真＆ビデオ" },
+  { value: "PRODUCTIVITY", label: "仕事効率化" },
+  { value: "REFERENCE", label: "辞書/辞典/その他" },
+  { value: "SHOPPING", label: "ショッピング" },
+  { value: "SOCIAL_NETWORKING", label: "ソーシャルネットワーキング" },
+  { value: "SPORTS", label: "スポーツ" },
+  { value: "STICKERS", label: "ステッカー" },
+  { value: "TRAVEL", label: "旅行" },
+  { value: "UTILITIES", label: "ユーティリティ" },
+  { value: "WEATHER", label: "天気" },
+];
+
+/**
+ * ゲームのサブカテゴリ
+ */
+export const IOS_GAME_SUB_CATEGORIES = [
+  { value: "", label: "未選択" },
+  { value: "GAMES_ACTION", label: "アクション" },
+  { value: "GAMES_ADVENTURE", label: "アドベンチャー" },
+  { value: "GAMES_CASUAL", label: "カジュアル" },
+  { value: "GAMES_BOARD", label: "ボード" },
+  { value: "GAMES_CARD", label: "カード" },
+  { value: "GAMES_DICE", label: "サイコロ" },
+  { value: "GAMES_EDUCATIONAL", label: "教育" },
+  { value: "GAMES_FAMILY", label: "ファミリー" },
+  { value: "GAMES_MUSIC", label: "ミュージック" },
+  { value: "GAMES_PUZZLE", label: "パズル" },
+  { value: "GAMES_RACING", label: "レーシング" },
+  { value: "GAMES_ROLE_PLAYING", label: "ロールプレイング" },
+  { value: "GAMES_SIMULATION", label: "シミュレーション" },
+  { value: "GAMES_SPORTS", label: "スポーツ" },
+  { value: "GAMES_STRATEGY", label: "ストラテジー" },
+  { value: "GAMES_TRIVIA", label: "トリビア" },
+  { value: "GAMES_WORD", label: "ワード" },
+];
+
+/**
+ * ステッカーのサブカテゴリ
+ */
+export const IOS_STICKER_SUB_CATEGORIES = [
+  { value: "", label: "未選択" },
+  { value: "STICKERS_EMOJI_AND_EXPRESSIONS", label: "絵文字＆表現" },
+  { value: "STICKERS_ANIMALS", label: "動物" },
+  { value: "STICKERS_CELEBRATIONS", label: "お祝い" },
+  { value: "STICKERS_CHARACTERS", label: "キャラクター" },
+  { value: "STICKERS_COMICS", label: "コミック" },
+  { value: "STICKERS_FOOD_AND_DRINK", label: "フード＆ドリンク" },
+  { value: "STICKERS_OBJECTS", label: "オブジェクト" },
+  { value: "STICKERS_PEOPLE", label: "人物" },
+  { value: "STICKERS_PLACES_AND_THINGS", label: "場所＆もの" },
+  { value: "STICKERS_SEASONAL", label: "季節" },
+  { value: "STICKERS_SPORTS", label: "スポーツ" },
+  { value: "STICKERS_TRAVEL", label: "旅行" },
+  { value: "STICKERS_VEHICLES", label: "乗り物" },
+  { value: "STICKERS_MUSIC", label: "ミュージック" },
 ];
