@@ -28,7 +28,7 @@ export default function Sidebar() {
         {projects.map((p) => (
           <Link
             key={p.id}
-            href={`/${p.id}/ios`}
+            href={`/${p.id}/ios/metadata`}
             className={`block px-3 py-2 rounded-md text-sm font-medium truncate transition
               ${activeProjectId === p.id ? "bg-blue-600 text-white" : "text-gray-300 hover:bg-gray-700"}`}
           >

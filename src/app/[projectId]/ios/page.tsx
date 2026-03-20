@@ -1,7 +1,10 @@
-import { IOS_FIELDS, IOS_GLOBAL_FIELDS } from "@/lib/constants/define";
-import MetadataEditor from "@/components/metadata/MetadataEditor";
+import { redirect } from "next/navigation";
 
-export default async function IosPage({ params }: { params: Promise<{ projectId: string }> }) {
+export default async function IosPage({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
   const { projectId } = await params;
-  return <MetadataEditor projectId={projectId} platform="ios" fields={IOS_FIELDS} globalFields={IOS_GLOBAL_FIELDS} />;
+  redirect(`/${projectId}/ios/metadata`);
 }

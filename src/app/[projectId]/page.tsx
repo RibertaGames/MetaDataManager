@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default async function AndroidPage({
+export default async function ProjectPage({
   params,
 }: {
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  redirect(`/${projectId}/android/metadata`);
+  redirect(`/${projectId}/ios/metadata`);
 }

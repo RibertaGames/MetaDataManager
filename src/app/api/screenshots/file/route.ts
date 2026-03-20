@@ -4,8 +4,6 @@ import path from "path";
 import { getProject } from "@/lib/fs/projectStore";
 import {
   ANDROID_SCREENSHOT_TYPES,
-  IOS_SCREENSHOT_TYPES,
-  DEFAULT_IOS_SCREENSHOT_FOLDER,
   DEFAULT_ANDROID_SCREENSHOT_FOLDER,
 } from "@/lib/constants/define";
 
@@ -29,9 +27,8 @@ export async function GET(req: NextRequest) {
     const folderName = ANDROID_SCREENSHOT_TYPES[type] ?? DEFAULT_ANDROID_SCREENSHOT_FOLDER;
     dir = path.join(project.fastlanePath, "metadata", "android", lang, "images", folderName);
   } else {
-    // iOS: fastlane/screenshots/{lang}/{device}/
-    const deviceFolder = IOS_SCREENSHOT_TYPES[type] ?? DEFAULT_IOS_SCREENSHOT_FOLDER;
-    dir = path.join(project.fastlanePath, "screenshots", lang, deviceFolder);
+    // iOS: fastlane/screenshots/{lang}/ (Fastlaneが解像度から自動判定)
+    dir = path.join(project.fastlanePath, "screenshots", lang);
   }
 
   const filePath = path.join(dir, filename);
