@@ -153,9 +153,10 @@ export const IOS_REVIEW_INFO_FIELDS: FieldDef[] = [
  * Android メタデータフィールド
  */
 export const ANDROID_FIELDS: FieldDef[] = [
-  { key: "title",             label: "タイトル",       maxLength: 30,   multiline: false, filePath: "title.txt"             },
+  { key: "title",             label: "タイトル",       maxLength: 50,   multiline: false, filePath: "title.txt"             },
   { key: "short_description", label: "簡単な説明",     maxLength: 80,   multiline: false, filePath: "short_description.txt" },
   { key: "full_description",  label: "詳細な説明",     maxLength: 4000, multiline: true,  filePath: "full_description.txt"  },
+  { key: "video",             label: "プロモーション動画URL", maxLength: null, multiline: false, filePath: "video.txt"     },
   { key: "changelog",         label: "変更履歴",       maxLength: 500,  multiline: true,  filePath: "changelogs/default.txt"},
 ];
 
@@ -205,14 +206,14 @@ export const IOS_DELIVERFILE_CONFIG: ConfigFieldDef[] = [
   { key: "submit_for_review", label: "審査に自動提出", type: "boolean", description: "アップロード後に自動的に審査に提出" },
   { key: "automatic_release", label: "承認後に自動リリース", type: "boolean", description: "審査承認後に自動的にリリース（段階的リリースと併用不可）" },
   { key: "phased_release", label: "段階的リリース（7日間）", type: "boolean", description: "7日間かけて段階的に配信（自動リリースと併用不可）" },
-  { key: "content_rights_contains_third_party_content", label: "サードパーティコンテンツを含む", type: "boolean", description: "広告、ユーザー生成コンテンツなど" },
-  { key: "content_rights_has_rights", label: "配信権を保有", type: "boolean", description: "コンテンツの配信権を保有している" },
 ];
 
 /**
- * iOS submission_information（IDFA・暗号化設定）
+ * iOS submission_information（コンテンツ権利・IDFA・暗号化設定）
  */
 export const IOS_SUBMISSION_INFO: ConfigFieldDef[] = [
+  { key: "content_rights_contains_third_party_content", label: "サードパーティコンテンツを含む", type: "boolean", description: "広告、ユーザー生成コンテンツなど" },
+  { key: "content_rights_has_rights", label: "配信権を保有", type: "boolean", description: "コンテンツの配信権を保有している" },
   { key: "add_id_info_uses_idfa", label: "IDFAを使用", type: "boolean", description: "広告識別子（IDFA）を使用" },
   { key: "add_id_info_serves_ads", label: "広告を表示", type: "boolean", description: "アプリ内で広告を表示" },
   { key: "add_id_info_tracks_action", label: "ユーザー行動をトラッキング", type: "boolean", description: "広告目的でユーザー行動を追跡" },
@@ -380,3 +381,110 @@ export const IOS_STICKER_SUB_CATEGORIES = [
   { value: "STICKERS_VEHICLES", label: "乗り物" },
   { value: "STICKERS_MUSIC", label: "ミュージック" },
 ];
+
+// ============================================
+// Android / Google Play 設定
+// ============================================
+
+/**
+ * Android カテゴリフィールド
+ */
+export const ANDROID_CATEGORY_FIELDS: FieldDef[] = [
+  { key: "category", label: "カテゴリ", maxLength: null, multiline: false },
+];
+
+/**
+ * Android Deliverfile/Supply 設定
+ */
+export const ANDROID_SUPPLY_CONFIG: ConfigFieldDef[] = [
+  { key: "track", label: "配信トラック", type: "select", description: "アプリの配信先トラック", options: [
+    { value: "internal", label: "Internal（内部テスト）" },
+    { value: "alpha", label: "Alpha（限定テスト）" },
+    { value: "beta", label: "Beta（ベータテスト）" },
+    { value: "production", label: "Production（本番リリース）" },
+  ]},
+  { key: "release_status", label: "リリース状態", type: "select", description: "リリースの状態", options: [
+    { value: "draft", label: "Draft（ドラフト）" },
+    { value: "completed", label: "Completed（リリース完了）" },
+  ]},
+  { key: "rollout", label: "段階的リリース（%）", type: "number", description: "0～100%で指定。100%で全ユーザーに配信", min: 0, max: 100 },
+  { key: "in_app_update_priority", label: "アプリ内更新優先度", type: "select", description: "0=低、5=最高（必須更新）", options: [
+    { value: 0, label: "0 - 低（スキップ可能）" },
+    { value: 1, label: "1 - 低" },
+    { value: 2, label: "2 - 中" },
+    { value: 3, label: "3 - 中" },
+    { value: 4, label: "4 - 高" },
+    { value: 5, label: "5 - 最高（必須更新）" },
+  ]},
+];
+
+/**
+ * Google Play カテゴリ一覧（アプリ）
+ */
+export const ANDROID_APP_CATEGORIES = [
+  { value: "", label: "未選択" },
+  { value: "APPLICATION", label: "総合" },
+  { value: "ART_AND_DESIGN", label: "アート＆デザイン" },
+  { value: "AUTO_AND_VEHICLES", label: "自動車" },
+  { value: "BEAUTY", label: "美容" },
+  { value: "BOOKS_AND_REFERENCE", label: "書籍＆リファレンス" },
+  { value: "BUSINESS", label: "ビジネス" },
+  { value: "COMICS", label: "コミック" },
+  { value: "COMMUNICATION", label: "通信" },
+  { value: "DATING", label: "デート" },
+  { value: "EDUCATION", label: "教育" },
+  { value: "ENTERTAINMENT", label: "エンターテインメント" },
+  { value: "EVENTS", label: "イベント" },
+  { value: "FINANCE", label: "金融" },
+  { value: "FOOD_AND_DRINK", label: "グルメ＆ドリンク" },
+  { value: "HEALTH_AND_FITNESS", label: "ヘルスケア＆フィットネス" },
+  { value: "HOUSE_AND_HOME", label: "住まい＆インテリア" },
+  { value: "LIFESTYLE", label: "ライフスタイル" },
+  { value: "MAPS_AND_NAVIGATION", label: "マップ＆ナビゲーション" },
+  { value: "MEDICAL", label: "医療" },
+  { value: "MUSIC_AND_AUDIO", label: "音楽＆オーディオ" },
+  { value: "NEWS_AND_MAGAZINES", label: "ニュース＆マガジン" },
+  { value: "PARENTING", label: "子育て" },
+  { value: "PERSONALIZATION", label: "カスタマイズ" },
+  { value: "PHOTOGRAPHY", label: "写真" },
+  { value: "PRODUCTIVITY", label: "仕事効率化" },
+  { value: "SHOPPING", label: "ショッピング" },
+  { value: "SOCIAL", label: "ソーシャルネットワーク" },
+  { value: "SPORTS", label: "スポーツ" },
+  { value: "TOOLS", label: "ツール" },
+  { value: "TRAVEL_AND_LOCAL", label: "トラベル＆ローカル" },
+  { value: "VIDEO_PLAYERS", label: "ビデオプレイヤー＆エディタ" },
+  { value: "WEATHER", label: "天気" },
+  { value: "ANDROID_WEAR", label: "Android Wear" },
+];
+
+/**
+ * Google Play ゲームカテゴリ一覧
+ */
+export const ANDROID_GAME_CATEGORIES = [
+  { value: "", label: "未選択" },
+  { value: "GAME", label: "ゲーム（総合）" },
+  { value: "GAME_ACTION", label: "アクション" },
+  { value: "GAME_ADVENTURE", label: "アドベンチャー" },
+  { value: "GAME_ARCADE", label: "アーケード" },
+  { value: "GAME_BOARD", label: "ボード" },
+  { value: "GAME_CARD", label: "カード" },
+  { value: "GAME_CASINO", label: "カジノ" },
+  { value: "GAME_CASUAL", label: "カジュアル" },
+  { value: "GAME_EDUCATIONAL", label: "教育" },
+  { value: "GAME_MUSIC", label: "ミュージック" },
+  { value: "GAME_PUZZLE", label: "パズル" },
+  { value: "GAME_RACING", label: "レーシング" },
+  { value: "GAME_ROLE_PLAYING", label: "ロールプレイング" },
+  { value: "GAME_SIMULATION", label: "シミュレーション" },
+  { value: "GAME_SPORTS", label: "スポーツ" },
+  { value: "GAME_STRATEGY", label: "ストラテジー" },
+  { value: "GAME_TRIVIA", label: "トリビア" },
+  { value: "GAME_WORD", label: "ワード" },
+  { value: "FAMILY", label: "ファミリー" },
+];
+
+/**
+ * すべてのAndroidカテゴリ（アプリ＋ゲーム）
+ */
+export const ANDROID_ALL_CATEGORIES = [...ANDROID_APP_CATEGORIES, ...ANDROID_GAME_CATEGORIES.slice(1)];

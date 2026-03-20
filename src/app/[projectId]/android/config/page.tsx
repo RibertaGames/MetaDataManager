@@ -1,3 +1,10 @@
+import ConfigEditor from "@/components/metadata/ConfigEditor";
+import {
+  ANDROID_CATEGORY_FIELDS,
+  ANDROID_SUPPLY_CONFIG,
+  IOS_AGE_RATING,
+} from "@/lib/constants/define";
+
 export default async function AndroidConfigPage({
   params,
 }: {
@@ -6,11 +13,14 @@ export default async function AndroidConfigPage({
   const { projectId } = await params;
 
   return (
-    <div className="flex items-center justify-center h-64">
-      <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-700 mb-2">🚧 Android設定</h2>
-        <p className="text-gray-500">現在開発中です。iOS設定を参考に実装予定です。</p>
-      </div>
-    </div>
+    <ConfigEditor
+      projectId={projectId}
+      platform="android"
+      categoryFields={ANDROID_CATEGORY_FIELDS}
+      reviewInfoFields={[]} // Androidには審査担当者情報なし
+      deliverfileConfig={ANDROID_SUPPLY_CONFIG}
+      submissionInfo={[]} // Androidには submission_information なし
+      ageRating={IOS_AGE_RATING} // 年齢制限はiOSと共通
+    />
   );
 }

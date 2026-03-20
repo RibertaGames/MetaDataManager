@@ -41,7 +41,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
       {/* プロジェクトヘッダー */}
       <div className="bg-white border-b border-gray-200 px-8 pt-5 pb-0">
         <h1 className="text-xl font-bold text-gray-800 mb-4">
-          {project?.name ?? "..."}
+          {project?.name || ""}
         </h1>
 
         {/* プラットフォームタブ（第1階層） */}

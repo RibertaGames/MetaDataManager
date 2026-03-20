@@ -62,8 +62,6 @@ export function readIosConfig(fastlanePath: string) {
       "submit_for_review",
       "automatic_release",
       "phased_release",
-      "content_rights_contains_third_party_content",
-      "content_rights_has_rights",
     ];
 
     for (const field of boolFields) {
@@ -83,6 +81,8 @@ export function readIosConfig(fastlanePath: string) {
     if (submissionMatch) {
       const submissionContent = submissionMatch[1];
       const submissionFields = [
+        "content_rights_contains_third_party_content",
+        "content_rights_has_rights",
         "add_id_info_uses_idfa",
         "add_id_info_serves_ads",
         "add_id_info_tracks_action",
@@ -97,6 +97,10 @@ export function readIosConfig(fastlanePath: string) {
         const match = submissionContent.match(new RegExp(`${field}:\\s*(true|false)`));
         if (match) {
           submission[field] = match[1] === "true";
+          // content_rights_* は deliverfile にも格納（UI表示用）
+          if (field === "content_rights_contains_third_party_content" || field === "content_rights_has_rights") {
+            deliverfile[field] = match[1] === "true";
+          }
         }
       }
     }
@@ -119,6 +123,53 @@ export function readIosConfig(fastlanePath: string) {
 }
 
 export function readAndroidConfig(fastlanePath: string) {
-  // Android用の設定読み込み（将来的に実装）
-  return { reviewInfo: {}, deliverfile: {}, submission: {}, ageRating: {} };
+  // カテゴリフィールド（Google Play Consoleで設定するため、ここでは未実装）
+  const category: Record<string, string> = {};
+
+  // Fastfile設定（パース）
+  const fastfilePath = path.join(fastlanePath, "Fastfile");
+  const deliverfile: Record<string, string | number | boolean> = {};
+
+  if (fs.existsSync(fastfilePath)) {
+    const content = fs.readFileSync(fastfilePath, "utf-8");
+
+    // track を抽出（例: track: 'internal'）
+    const trackMatch = content.match(/track:\s*['"](\w+)['"]/);
+    if (trackMatch) {
+      deliverfile.track = trackMatch[1];
+    }
+
+    // release_status を抽出
+    const releaseStatusMatch = content.match(/release_status:\s*['"](\w+)['"]/);
+    if (releaseStatusMatch) {
+      deliverfile.release_status = releaseStatusMatch[1];
+    }
+
+    // rollout を抽出（0.0～1.0）
+    const rolloutMatch = content.match(/rollout:\s*([\d.]+)/);
+    if (rolloutMatch) {
+      deliverfile.rollout = Math.round(parseFloat(rolloutMatch[1]) * 100); // 0～100%に変換
+    }
+
+    // in_app_update_priority を抽出
+    const priorityMatch = content.match(/in_app_update_priority:\s*(\d+)/);
+    if (priorityMatch) {
+      deliverfile.in_app_update_priority = parseInt(priorityMatch[1]);
+    }
+  }
+
+  // 年齢制限設定（age_rating.json）- iOSと共通
+  const ageRatingPath = path.join(fastlanePath, "metadata", "age_rating.json");
+  let ageRating: Record<string, number> = {};
+
+  if (fs.existsSync(ageRatingPath)) {
+    try {
+      const content = fs.readFileSync(ageRatingPath, "utf-8");
+      ageRating = JSON.parse(content);
+    } catch {
+      // JSONパースエラーは無視
+    }
+  }
+
+  return { category, reviewInfo: {}, deliverfile, submission: {}, ageRating };
 }

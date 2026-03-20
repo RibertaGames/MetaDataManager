@@ -6,6 +6,7 @@ import {
   IOS_PRIMARY_CATEGORIES,
   IOS_GAME_SUB_CATEGORIES,
   IOS_STICKER_SUB_CATEGORIES,
+  ANDROID_ALL_CATEGORIES,
 } from "@/lib/constants/define";
 import { showToast } from "@/components/common/Toast";
 
@@ -107,8 +108,36 @@ export default function ConfigEditor({
             📂 カテゴリ設定
           </h2>
 
-          {/* 主カテゴリとサブカテゴリ */}
-          <div className="mb-6 p-6 bg-white rounded-lg border-2 border-blue-100 shadow-sm">
+          {/* Android の場合：シンプルな1つのカテゴリ選択 */}
+          {platform === "android" && (
+            <div className="p-6 bg-white rounded-lg border-2 border-green-100 shadow-sm">
+              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                カテゴリ <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={categoryValues.category ?? ""}
+                onChange={(e) =>
+                  setCategoryValues((prev) => ({ ...prev, category: e.target.value }))
+                }
+                className="w-full px-4 py-2.5 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                {ANDROID_ALL_CATEGORIES.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-2 text-xs text-gray-500">
+                アプリまたはゲームのカテゴリを1つ選択してください
+              </p>
+            </div>
+          )}
+
+          {/* iOS の場合：階層的なカテゴリ選択 */}
+          {platform === "ios" && (
+            <>
+              {/* 主カテゴリとサブカテゴリ */}
+              <div className="mb-6 p-6 bg-white rounded-lg border-2 border-blue-100 shadow-sm">
             <div className="mb-4">
               <label className="block text-sm font-semibold text-gray-800 mb-2">
                 主カテゴリ <span className="text-red-500">*</span>
@@ -361,15 +390,18 @@ export default function ConfigEditor({
                 </div>
               </div>
             )}
-          </div>
+              </div>
+            </>
+          )}
         </div>
       )}
 
-      {/* 審査担当者向け連絡先情報 */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
-          📧 審査担当者向け連絡先情報
-        </h2>
+      {/* 審査担当者向け連絡先情報（iOSのみ）*/}
+      {reviewInfoFields.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
+            📧 審査担当者向け連絡先情報
+          </h2>
         <div className="space-y-4">
           {reviewInfoFields.map((field) => (
             <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -401,58 +433,79 @@ export default function ConfigEditor({
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Deliverfile 基本設定 */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">⚙️ Deliverfile 基本設定</h2>
-        <div className="space-y-4">
-          {deliverfileConfig.map((field) => (
-            <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
-              {field.description && (
-                <p className="text-xs text-gray-500 mb-2">{field.description}</p>
-              )}
-              {field.type === "boolean" ? (
-                <input
-                  type="checkbox"
-                  checked={deliverfile[field.key] === true}
-                  onChange={(e) =>
-                    setDeliverfile((prev) => ({ ...prev, [field.key]: e.target.checked }))
-                  }
-                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-              ) : field.type === "number" ? (
-                <input
-                  type="number"
-                  value={deliverfile[field.key] ?? ""}
-                  onChange={(e) =>
-                    setDeliverfile((prev) => ({ ...prev, [field.key]: parseInt(e.target.value) || 0 }))
-                  }
-                  min={field.min}
-                  max={field.max}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={deliverfile[field.key] ?? ""}
-                  onChange={(e) =>
-                    setDeliverfile((prev) => ({ ...prev, [field.key]: e.target.value }))
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              )}
-            </div>
-          ))}
+      {deliverfileConfig.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
+            ⚙️ {platform === "ios" ? "Deliverfile" : "Supply"} 基本設定
+          </h2>
+          <div className="space-y-4">
+            {deliverfileConfig.map((field) => (
+              <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+                {field.description && (
+                  <p className="text-xs text-gray-500 mb-2">{field.description}</p>
+                )}
+                {field.type === "boolean" ? (
+                  <input
+                    type="checkbox"
+                    checked={deliverfile[field.key] === true}
+                    onChange={(e) =>
+                      setDeliverfile((prev) => ({ ...prev, [field.key]: e.target.checked }))
+                    }
+                    className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                ) : field.type === "select" && field.options ? (
+                  <select
+                    value={deliverfile[field.key] ?? (field.options[0]?.value || "")}
+                    onChange={(e) => {
+                      const value = field.options?.find((opt) => String(opt.value) === e.target.value)?.value;
+                      setDeliverfile((prev) => ({ ...prev, [field.key]: value }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {field.options.map((opt) => (
+                      <option key={String(opt.value)} value={String(opt.value)}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : field.type === "number" ? (
+                  <input
+                    type="number"
+                    value={deliverfile[field.key] ?? ""}
+                    onChange={(e) =>
+                      setDeliverfile((prev) => ({ ...prev, [field.key]: parseInt(e.target.value) || 0 }))
+                    }
+                    min={field.min}
+                    max={field.max}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={deliverfile[field.key] ?? ""}
+                    onChange={(e) =>
+                      setDeliverfile((prev) => ({ ...prev, [field.key]: e.target.value }))
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Submission Information (IDFA・暗号化設定) */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
-          🔒 Submission Information（IDFA・暗号化設定）
-        </h2>
+      {/* Submission Information (コンテンツ権利・IDFA・暗号化)（iOSのみ） */}
+      {submissionInfo.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
+            🔒 Submission Information（コンテンツ権利・IDFA・暗号化）
+          </h2>
         <div className="space-y-4">
           {submissionInfo.map((field) => (
             <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -475,11 +528,13 @@ export default function ConfigEditor({
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      )}
 
       {/* 年齢制限設定 */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">🔞 年齢制限設定</h2>
+      {ageRating.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">🔞 年齢制限設定</h2>
         <div className="space-y-4">
           {ageRating.map((field) => (
             <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -502,7 +557,8 @@ export default function ConfigEditor({
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

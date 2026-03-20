@@ -90,20 +90,19 @@ export function writeIosConfig(
   deliverfileContent += `# 価格設定（0 = 無料）\n`;
   deliverfileContent += `price_tier ${priceTier}\n\n`;
 
-  // コンテンツの配信権
-  deliverfileContent += `# コンテンツの配信権\n`;
-  if (thirdPartyContent) {
-    deliverfileContent += `# AdMob広告を使用しているため、サードパーティコンテンツを含む\n`;
-  }
-  deliverfileContent += `content_rights_contains_third_party_content ${thirdPartyContent}\n`;
-  deliverfileContent += `content_rights_has_rights ${hasRights}\n\n`;
-
   // 年齢制限設定
   deliverfileContent += `# 年齢制限設定\n`;
   deliverfileContent += `app_rating_config_path "./metadata/age_rating.json"\n\n`;
 
   // submission_information
   deliverfileContent += `submission_information({\n`;
+  // コンテンツの配信権
+  if (thirdPartyContent) {
+    deliverfileContent += `  # AdMob広告を使用しているため、サードパーティコンテンツを含む\n`;
+  }
+  deliverfileContent += `  content_rights_contains_third_party_content: ${thirdPartyContent},\n`;
+  deliverfileContent += `  content_rights_has_rights: ${hasRights},\n`;
+  deliverfileContent += `  # IDFA設定\n`;
   deliverfileContent += `  add_id_info_uses_idfa: ${config.submission.add_id_info_uses_idfa ?? false},\n`;
   deliverfileContent += `  add_id_info_serves_ads: ${config.submission.add_id_info_serves_ads ?? false},\n`;
   deliverfileContent += `  add_id_info_tracks_action: ${config.submission.add_id_info_tracks_action ?? false},\n`;
@@ -151,6 +150,91 @@ export function writeIosConfig(
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
 }
 
-export function writeAndroidConfig(fastlanePath: string, config: any) {
-  // Android用の設定書き込み（将来的に実装）
+export function writeAndroidConfig(
+  fastlanePath: string,
+  config: {
+    category: Record<string, string>;
+    reviewInfo: Record<string, string>;
+    deliverfile: Record<string, string | number | boolean>;
+    submission: Record<string, boolean>;
+    ageRating: Record<string, number>;
+  }
+) {
+  // カテゴリフィールド（Google Play Consoleで設定するため、ファイルには書き込まない）
+  // 必要に応じて将来的に実装
+
+  // Fastfile を更新（track, release_status, rollout, in_app_update_priority）
+  const fastfilePath = path.join(fastlanePath, "Fastfile");
+
+  if (fs.existsSync(fastfilePath)) {
+    let content = fs.readFileSync(fastfilePath, "utf-8");
+
+    // track を更新
+    const track = config.deliverfile.track ?? "internal";
+    content = content.replace(
+      /track:\s*['"][^'"]*['"]/g,
+      `track: '${track}'`
+    );
+
+    // release_status を更新
+    const releaseStatus = config.deliverfile.release_status ?? "draft";
+    content = content.replace(
+      /release_status:\s*['"][^'"]*['"]/g,
+      `release_status: '${releaseStatus}'`
+    );
+
+    // rollout を更新（100%の場合は削除、それ以外は追加/更新）
+    const rollout = config.deliverfile.rollout ?? 100;
+    if (rollout < 100) {
+      const rolloutValue = (rollout / 100).toFixed(2); // 0.0～1.0に変換
+      if (content.includes("rollout:")) {
+        content = content.replace(/rollout:\s*[\d.]+/, `rollout: ${rolloutValue}`);
+      } else {
+        // rollout行を追加（release_statusの後に）
+        content = content.replace(
+          /(release_status:\s*['"][^'"]*['"])/,
+          `$1,\n      rollout: ${rolloutValue}`
+        );
+      }
+    } else {
+      // 100%の場合はrollout行を削除
+      content = content.replace(/,?\s*rollout:\s*[\d.]+,?\n?/g, "");
+    }
+
+    // in_app_update_priority を更新
+    const priority = config.deliverfile.in_app_update_priority ?? 0;
+    if (content.includes("in_app_update_priority:")) {
+      content = content.replace(
+        /in_app_update_priority:\s*\d+/,
+        `in_app_update_priority: ${priority}`
+      );
+    }
+
+    fs.writeFileSync(fastfilePath, content, "utf-8");
+  }
+
+  // age_rating.json を書き込み（iOSと共通）
+  const ageRatingPath = path.join(fastlanePath, "metadata", "age_rating.json");
+  ensureDir(path.dirname(ageRatingPath));
+
+  const ageRatingData = {
+    CARTOON_FANTASY_VIOLENCE: config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0,
+    REALISTIC_VIOLENCE: config.ageRating.REALISTIC_VIOLENCE ?? 0,
+    PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE:
+      config.ageRating.PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE ?? 0,
+    PROFANITY_CRUDE_HUMOR: config.ageRating.PROFANITY_CRUDE_HUMOR ?? 0,
+    MATURE_SUGGESTIVE: config.ageRating.MATURE_SUGGESTIVE ?? 0,
+    HORROR: config.ageRating.HORROR ?? 0,
+    MEDICAL_TREATMENT_INFO: config.ageRating.MEDICAL_TREATMENT_INFO ?? 0,
+    ALCOHOL_TOBACCO_DRUGS: config.ageRating.ALCOHOL_TOBACCO_DRUGS ?? 0,
+    GAMBLING: config.ageRating.GAMBLING ?? 0,
+    SEXUAL_CONTENT_NUDITY: config.ageRating.SEXUAL_CONTENT_NUDITY ?? 0,
+    GRAPHIC_SEXUAL_CONTENT_NUDITY: config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0,
+    UNRESTRICTED_WEB_ACCESS: config.ageRating.UNRESTRICTED_WEB_ACCESS ?? 0,
+    GAMBLING_CONTESTS: config.ageRating.GAMBLING_CONTESTS ?? 0,
+    SIMULATED_GAMBLING: config.ageRating.SIMULATED_GAMBLING ?? 0,
+    KIDSAGECATEGORY: null,
+  };
+
+  fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
 }
