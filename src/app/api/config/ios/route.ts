@@ -15,13 +15,21 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { projectId, category, reviewInfo, deliverfile, submission, ageRating } = await req.json();
-  if (!projectId)
-    return NextResponse.json({ error: "projectId は必須です" }, { status: 400 });
+  try {
+    const { projectId, category, reviewInfo, deliverfile, submission, ageRating } = await req.json();
+    if (!projectId)
+      return NextResponse.json({ error: "projectId は必須です" }, { status: 400 });
 
-  const project = getProject(projectId);
-  if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    const project = getProject(projectId);
+    if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
 
-  writeIosConfig(project.fastlanePath, { category, reviewInfo, deliverfile, submission, ageRating });
-  return NextResponse.json({ ok: true });
+    writeIosConfig(project.fastlanePath, { category, reviewInfo, deliverfile, submission, ageRating });
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("iOS config save error:", error);
+    return NextResponse.json({
+      error: "保存中にエラーが発生しました",
+      details: error instanceof Error ? error.message : String(error)
+    }, { status: 500 });
+  }
 }

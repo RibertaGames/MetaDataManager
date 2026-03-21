@@ -19,12 +19,14 @@ export function writeIosConfig(
     reviewInfo: Record<string, string>;
     deliverfile: Record<string, string | number | boolean>;
     submission: Record<string, boolean>;
-    ageRating: Record<string, number>;
+    ageRating: Record<string, number | boolean | string>;
   }
 ) {
-  // カテゴリフィールドを書き込み
-  const metadataPath = path.join(fastlanePath, "metadata");
-  ensureDir(metadataPath);
+  console.log("writeIosConfig called with ageRating:", config.ageRating);
+  try {
+    // カテゴリフィールドを書き込み
+    const metadataPath = path.join(fastlanePath, "metadata");
+    ensureDir(metadataPath);
 
   const categoryFields = [
     "primary_category",
@@ -69,9 +71,8 @@ export function writeIosConfig(
   const submitForReview = config.deliverfile.submit_for_review ?? false;
   const automaticRelease = config.deliverfile.automatic_release ?? true;
   const phasedRelease = config.deliverfile.phased_release ?? false;
-  const priceTier = config.deliverfile.price_tier ?? 0;
-  const thirdPartyContent = config.deliverfile.content_rights_contains_third_party_content ?? false;
-  const hasRights = config.deliverfile.content_rights_has_rights ?? true;
+  const thirdPartyContent = config.submission.content_rights_contains_third_party_content ?? true;
+  const hasRights = config.submission.content_rights_has_rights ?? true;
 
   deliverfileContent += `submit_for_review ${submitForReview}\n`;
   deliverfileContent += `automatic_release ${automaticRelease}\n`;
@@ -86,9 +87,9 @@ export function writeIosConfig(
   deliverfileContent += `# release_notes は各言語の metadata/*/release_notes.txt から自動読み込み\n`;
   deliverfileContent += `run_precheck_before_submit true\n\n`;
 
-  // 価格設定
-  deliverfileContent += `# 価格設定（0 = 無料）\n`;
-  deliverfileContent += `price_tier ${priceTier}\n\n`;
+  // 価格設定は App Store Connect で手動設定
+  deliverfileContent += `# 価格設定は App Store Connect で手動設定してください\n`;
+  deliverfileContent += `# price_tier は新しい App Store Connect API で廃止されたため、使用しません\n\n`;
 
   // 年齢制限設定
   deliverfileContent += `# 年齢制限設定\n`;
@@ -129,7 +130,10 @@ export function writeIosConfig(
   ensureDir(path.dirname(ageRatingPath));
 
   // 新しいApp Store Connect APIフォーマット
-  const ratingValue = (val: number) => val === 0 ? "NONE" : val === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+  const ratingValue = (val: number | boolean | string | undefined) => {
+    const numVal = typeof val === "number" ? val : 0;
+    return numVal === 0 ? "NONE" : numVal === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+  };
 
   const ageRatingData = {
     violenceCartoonOrFantasy: ratingValue(config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0),
@@ -155,10 +159,14 @@ export function writeIosConfig(
     userGeneratedContent: config.ageRating.userGeneratedContent ?? false,
     healthOrWellnessTopics: config.ageRating.healthOrWellnessTopics ?? false,
     parentalControls: config.ageRating.parentalControls ?? false,
-    gunsOrOtherWeapons: config.ageRating.gunsOrOtherWeapons ?? false,
+    gunsOrOtherWeapons: ratingValue(config.ageRating.gunsOrOtherWeapons ?? 0),
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
+  } catch (error) {
+    console.error("writeConfig error:", error);
+    throw new Error(`設定の保存に失敗しました: ${error instanceof Error ? error.message : String(error)}`);
+  }
 }
 
 export function writeAndroidConfig(
@@ -168,14 +176,15 @@ export function writeAndroidConfig(
     reviewInfo: Record<string, string>;
     deliverfile: Record<string, string | number | boolean>;
     submission: Record<string, boolean>;
-    ageRating: Record<string, number>;
+    ageRating: Record<string, number | boolean | string>;
   }
 ) {
-  // カテゴリフィールド（Google Play Consoleで設定するため、ファイルには書き込まない）
-  // 必要に応じて将来的に実装
+  try {
+    // カテゴリフィールド（Google Play Consoleで設定するため、ファイルには書き込まない）
+    // 必要に応じて将来的に実装
 
-  // Fastfile を更新（track, release_status, rollout, in_app_update_priority）
-  const fastfilePath = path.join(fastlanePath, "Fastfile");
+    // Fastfile を更新（track, release_status, rollout, in_app_update_priority）
+    const fastfilePath = path.join(fastlanePath, "Fastfile");
 
   if (fs.existsSync(fastfilePath)) {
     let content = fs.readFileSync(fastfilePath, "utf-8");
@@ -229,7 +238,10 @@ export function writeAndroidConfig(
   ensureDir(path.dirname(ageRatingPath));
 
   // 新しいApp Store Connect APIフォーマット
-  const ratingValue = (val: number) => val === 0 ? "NONE" : val === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+  const ratingValue = (val: number | boolean | string | undefined) => {
+    const numVal = typeof val === "number" ? val : 0;
+    return numVal === 0 ? "NONE" : numVal === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+  };
 
   const ageRatingData = {
     violenceCartoonOrFantasy: ratingValue(config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0),
@@ -255,8 +267,12 @@ export function writeAndroidConfig(
     userGeneratedContent: config.ageRating.userGeneratedContent ?? false,
     healthOrWellnessTopics: config.ageRating.healthOrWellnessTopics ?? false,
     parentalControls: config.ageRating.parentalControls ?? false,
-    gunsOrOtherWeapons: config.ageRating.gunsOrOtherWeapons ?? false,
+    gunsOrOtherWeapons: ratingValue(config.ageRating.gunsOrOtherWeapons ?? 0),
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
+  } catch (error) {
+    console.error("writeConfig error:", error);
+    throw new Error(`設定の保存に失敗しました: ${error instanceof Error ? error.message : String(error)}`);
+  }
 }

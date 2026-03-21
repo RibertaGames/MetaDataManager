@@ -202,7 +202,6 @@ export const DEEPL_API_ENDPOINT_PRO = "https://api.deepl.com/v2/translate";
  * iOS Deliverfile 基本設定
  */
 export const IOS_DELIVERFILE_CONFIG: ConfigFieldDef[] = [
-  { key: "price_tier", label: "価格帯", type: "number", description: "0 = 無料、1-87 = 有料", min: 0, max: 87 },
   { key: "submit_for_review", label: "審査に自動提出", type: "boolean", description: "アップロード後に自動的に審査に提出" },
   { key: "automatic_release", label: "承認後に自動リリース", type: "boolean", description: "審査承認後に自動的にリリース（段階的リリースと併用不可）" },
   { key: "phased_release", label: "段階的リリース（7日間）", type: "boolean", description: "7日間かけて段階的に配信（自動リリースと併用不可）" },
@@ -305,7 +304,11 @@ export const IOS_AGE_RATING: ConfigFieldDef[] = [
   { key: "userGeneratedContent", label: "ユーザー生成コンテンツ", type: "boolean", description: "ユーザーが作成したコンテンツを含む" },
   { key: "healthOrWellnessTopics", label: "健康・ウェルネス関連", type: "boolean", description: "健康やウェルネスに関する情報を提供" },
   { key: "parentalControls", label: "ペアレンタルコントロール", type: "boolean", description: "保護者向けの制御機能を含む" },
-  { key: "gunsOrOtherWeapons", label: "銃・武器の描写", type: "boolean", description: "銃や武器の描写を含む" },
+  { key: "gunsOrOtherWeapons", label: "銃・武器の描写", type: "select", options: [
+    { value: 0, label: "なし" },
+    { value: 1, label: "まれ/軽度" },
+    { value: 2, label: "頻繁/激しい" },
+  ]},
 ];
 
 // ============================================

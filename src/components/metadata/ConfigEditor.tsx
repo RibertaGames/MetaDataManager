@@ -75,10 +75,17 @@ export default function ConfigEditor({
           ageRating: rating,
         }),
       });
-      if (res.ok) showToast("設定を保存しました");
-      else showToast("保存に失敗しました", "error");
-    } catch {
-      showToast("保存中にエラーが発生しました", "error");
+      if (res.ok) {
+        showToast("設定を保存しました");
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        showToast(
+          `保存に失敗しました: ${errorData.error || errorData.details || "不明なエラー"}`,
+          "error"
+        );
+      }
+    } catch (error) {
+      showToast(`保存中にエラーが発生しました: ${error instanceof Error ? error.message : "不明なエラー"}`, "error");
     } finally {
       setSaving(false);
     }
@@ -539,6 +546,9 @@ export default function ConfigEditor({
           {ageRating.map((field) => (
             <div key={field.key} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+              {field.description && (
+                <p className="text-xs text-gray-500 mb-2">{field.description}</p>
+              )}
               {field.type === "select" && field.options ? (
                 <select
                   value={rating[field.key] ?? 0}
@@ -553,6 +563,15 @@ export default function ConfigEditor({
                     </option>
                   ))}
                 </select>
+              ) : field.type === "boolean" ? (
+                <input
+                  type="checkbox"
+                  checked={rating[field.key] === true}
+                  onChange={(e) =>
+                    setRating((prev) => ({ ...prev, [field.key]: e.target.checked }))
+                  }
+                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
               ) : null}
             </div>
           ))}
