@@ -92,7 +92,7 @@ export function writeIosConfig(
 
   // 年齢制限設定
   deliverfileContent += `# 年齢制限設定\n`;
-  deliverfileContent += `app_rating_config_path "./metadata/age_rating.json"\n\n`;
+  deliverfileContent += `app_rating_config_path "./fastlane/metadata/age_rating.json"\n\n`;
 
   // submission_information
   deliverfileContent += `submission_information({\n`;
