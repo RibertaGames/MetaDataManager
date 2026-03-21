@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const projectId = req.nextUrl.searchParams.get("projectId");
   const platform = req.nextUrl.searchParams.get("platform");
   const lang = req.nextUrl.searchParams.get("lang");
-  const type = req.nextUrl.searchParams.get("type") ?? (platform === "ios" ? "iphone67" : "phone");
+  const type = req.nextUrl.searchParams.get("type") ?? (platform === "ios" ? "iphone65" : "phone");
 
   if (!projectId || !platform || !lang) {
     return NextResponse.json({ error: "projectId, platform, lang は必須です" }, { status: 400 });
@@ -31,21 +31,33 @@ export async function GET(req: NextRequest) {
 
   if (!fs.existsSync(dir)) return NextResponse.json({ screenshots: [] });
 
-  const files = fs.readdirSync(dir)
-    .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f))
-    .map((f) => ({
-      filename: f,
-      url: `/api/screenshots/file?projectId=${projectId}&platform=${platform}&lang=${lang}&type=${type}&filename=${encodeURIComponent(f)}`,
-    }));
+  let files = fs.readdirSync(dir)
+    .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f));
 
-  return NextResponse.json({ screenshots: files });
+  // iOS: デバイスタイプでファイル名をフィルタリング
+  if (platform === "ios") {
+    if (type === "ipad") {
+      // iPad用: iPad_で始まるファイルのみ
+      files = files.filter((f) => f.startsWith("iPad_"));
+    } else {
+      // iPhone用: iPad_で始まらないファイルのみ
+      files = files.filter((f) => !f.startsWith("iPad_"));
+    }
+  }
+
+  const screenshots = files.map((f) => ({
+    filename: f,
+    url: `/api/screenshots/file?projectId=${projectId}&platform=${platform}&lang=${lang}&type=${type}&filename=${encodeURIComponent(f)}`,
+  }));
+
+  return NextResponse.json({ screenshots });
 }
 
 export async function DELETE(req: NextRequest) {
   const projectId = req.nextUrl.searchParams.get("projectId");
   const platform = req.nextUrl.searchParams.get("platform");
   const lang = req.nextUrl.searchParams.get("lang");
-  const type = req.nextUrl.searchParams.get("type") ?? (platform === "ios" ? "iphone67" : "phone");
+  const type = req.nextUrl.searchParams.get("type") ?? (platform === "ios" ? "iphone65" : "phone");
   const filename = req.nextUrl.searchParams.get("filename");
 
   if (!projectId || !platform || !lang || !filename) {

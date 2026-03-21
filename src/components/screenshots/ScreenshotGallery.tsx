@@ -12,10 +12,8 @@ interface Props {
 
 // fastlane deliver のiOSデバイスフォルダ名に対応
 const IOS_TYPES = [
-  { value: "iphone67", label: 'iPhone 6.7"', required: true },
-  { value: "iphone65", label: 'iPhone 6.5"', required: false },
-  { value: "iphone55", label: 'iPhone 5.5"', required: false },
-  { value: "ipad", label: "iPad Pro", required: false },
+  { value: "iphone65", label: 'iPhone 6.5"', required: true },
+  { value: "ipad", label: 'iPad Pro 13"', required: true },
 ];
 
 const ANDROID_TYPES = [
@@ -27,7 +25,7 @@ const ANDROID_TYPES = [
 export default function ScreenshotGallery({ projectId, platform }: Props) {
   const langs = LANGUAGES;
   const [lang, setLang] = useState(platform === "ios" ? "ja" : "ja-JP");
-  const [type, setType] = useState(platform === "ios" ? "iphone67" : "phone");
+  const [type, setType] = useState(platform === "ios" ? "iphone65" : "phone");
   const deviceTypes = platform === "ios" ? IOS_TYPES : ANDROID_TYPES;
   const [screenshots, setScreenshots] = useState<Screenshot[]>([]);
   const [loading, setLoading] = useState(false);
@@ -45,7 +43,7 @@ export default function ScreenshotGallery({ projectId, platform }: Props) {
       const newLang = platform === "ios" ? currentLangEntry.ios : currentLangEntry.android;
       setLang(newLang);
     }
-    setType(platform === "ios" ? "iphone67" : "phone");
+    setType(platform === "ios" ? "iphone65" : "phone");
   }, [platform]);
 
   function loadScreenshots() {

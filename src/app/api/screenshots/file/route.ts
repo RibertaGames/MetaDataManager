@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const projectId = searchParams.get("projectId");
   const platform = searchParams.get("platform");
   const lang = searchParams.get("lang");
-  const type = searchParams.get("type") ?? (platform === "ios" ? "iphone67" : "phone");
+  const type = searchParams.get("type") ?? (platform === "ios" ? "iphone65" : "phone");
   const filename = searchParams.get("filename");
 
   if (!projectId || !platform || !lang || !filename) {
