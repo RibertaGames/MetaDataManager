@@ -128,23 +128,25 @@ export function writeIosConfig(
   const ageRatingPath = path.join(fastlanePath, "metadata", "age_rating.json");
   ensureDir(path.dirname(ageRatingPath));
 
+  // 新しいApp Store Connect APIフォーマット
+  const ratingValue = (val: number) => val === 0 ? "NONE" : val === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+
   const ageRatingData = {
-    CARTOON_FANTASY_VIOLENCE: config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0,
-    REALISTIC_VIOLENCE: config.ageRating.REALISTIC_VIOLENCE ?? 0,
-    PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE:
-      config.ageRating.PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE ?? 0,
-    PROFANITY_CRUDE_HUMOR: config.ageRating.PROFANITY_CRUDE_HUMOR ?? 0,
-    MATURE_SUGGESTIVE: config.ageRating.MATURE_SUGGESTIVE ?? 0,
-    HORROR: config.ageRating.HORROR ?? 0,
-    MEDICAL_TREATMENT_INFO: config.ageRating.MEDICAL_TREATMENT_INFO ?? 0,
-    ALCOHOL_TOBACCO_DRUGS: config.ageRating.ALCOHOL_TOBACCO_DRUGS ?? 0,
-    GAMBLING: config.ageRating.GAMBLING ?? 0,
-    SEXUAL_CONTENT_NUDITY: config.ageRating.SEXUAL_CONTENT_NUDITY ?? 0,
-    GRAPHIC_SEXUAL_CONTENT_NUDITY: config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0,
-    UNRESTRICTED_WEB_ACCESS: config.ageRating.UNRESTRICTED_WEB_ACCESS ?? 0,
-    GAMBLING_CONTESTS: config.ageRating.GAMBLING_CONTESTS ?? 0,
-    SIMULATED_GAMBLING: config.ageRating.SIMULATED_GAMBLING ?? 0,
-    KIDSAGECATEGORY: null,
+    violenceCartoonOrFantasy: ratingValue(config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0),
+    violenceRealistic: ratingValue(config.ageRating.REALISTIC_VIOLENCE ?? 0),
+    violenceRealisticProlongedGraphicOrSadistic: ratingValue(config.ageRating.PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE ?? 0),
+    profanityOrCrudeHumor: ratingValue(config.ageRating.PROFANITY_CRUDE_HUMOR ?? 0),
+    matureOrSuggestiveThemes: ratingValue(config.ageRating.MATURE_SUGGESTIVE ?? 0),
+    horrorOrFearThemes: ratingValue(config.ageRating.HORROR ?? 0),
+    medicalOrTreatmentInformation: ratingValue(config.ageRating.MEDICAL_TREATMENT_INFO ?? 0),
+    alcoholTobaccoOrDrugUseOrReferences: ratingValue(config.ageRating.ALCOHOL_TOBACCO_DRUGS ?? 0),
+    gambling: false,
+    contests: ratingValue(config.ageRating.GAMBLING_CONTESTS ?? 0),
+    gamblingSimulated: ratingValue(config.ageRating.SIMULATED_GAMBLING ?? 0),
+    sexualContentOrNudity: ratingValue(config.ageRating.SEXUAL_CONTENT_NUDITY ?? 0),
+    sexualContentGraphicAndNudity: ratingValue(config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0),
+    unrestrictedWebAccess: config.ageRating.UNRESTRICTED_WEB_ACCESS === 1 || config.ageRating.UNRESTRICTED_WEB_ACCESS === 2,
+    kidsAgeBand: null,
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
@@ -217,23 +219,25 @@ export function writeAndroidConfig(
   const ageRatingPath = path.join(fastlanePath, "metadata", "age_rating.json");
   ensureDir(path.dirname(ageRatingPath));
 
+  // 新しいApp Store Connect APIフォーマット
+  const ratingValue = (val: number) => val === 0 ? "NONE" : val === 1 ? "INFREQUENT_OR_MILD" : "FREQUENT_OR_INTENSE";
+
   const ageRatingData = {
-    CARTOON_FANTASY_VIOLENCE: config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0,
-    REALISTIC_VIOLENCE: config.ageRating.REALISTIC_VIOLENCE ?? 0,
-    PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE:
-      config.ageRating.PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE ?? 0,
-    PROFANITY_CRUDE_HUMOR: config.ageRating.PROFANITY_CRUDE_HUMOR ?? 0,
-    MATURE_SUGGESTIVE: config.ageRating.MATURE_SUGGESTIVE ?? 0,
-    HORROR: config.ageRating.HORROR ?? 0,
-    MEDICAL_TREATMENT_INFO: config.ageRating.MEDICAL_TREATMENT_INFO ?? 0,
-    ALCOHOL_TOBACCO_DRUGS: config.ageRating.ALCOHOL_TOBACCO_DRUGS ?? 0,
-    GAMBLING: config.ageRating.GAMBLING ?? 0,
-    SEXUAL_CONTENT_NUDITY: config.ageRating.SEXUAL_CONTENT_NUDITY ?? 0,
-    GRAPHIC_SEXUAL_CONTENT_NUDITY: config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0,
-    UNRESTRICTED_WEB_ACCESS: config.ageRating.UNRESTRICTED_WEB_ACCESS ?? 0,
-    GAMBLING_CONTESTS: config.ageRating.GAMBLING_CONTESTS ?? 0,
-    SIMULATED_GAMBLING: config.ageRating.SIMULATED_GAMBLING ?? 0,
-    KIDSAGECATEGORY: null,
+    violenceCartoonOrFantasy: ratingValue(config.ageRating.CARTOON_FANTASY_VIOLENCE ?? 0),
+    violenceRealistic: ratingValue(config.ageRating.REALISTIC_VIOLENCE ?? 0),
+    violenceRealisticProlongedGraphicOrSadistic: ratingValue(config.ageRating.PROLONGED_GRAPHIC_SADISTIC_REALISTIC_VIOLENCE ?? 0),
+    profanityOrCrudeHumor: ratingValue(config.ageRating.PROFANITY_CRUDE_HUMOR ?? 0),
+    matureOrSuggestiveThemes: ratingValue(config.ageRating.MATURE_SUGGESTIVE ?? 0),
+    horrorOrFearThemes: ratingValue(config.ageRating.HORROR ?? 0),
+    medicalOrTreatmentInformation: ratingValue(config.ageRating.MEDICAL_TREATMENT_INFO ?? 0),
+    alcoholTobaccoOrDrugUseOrReferences: ratingValue(config.ageRating.ALCOHOL_TOBACCO_DRUGS ?? 0),
+    gambling: false,
+    contests: ratingValue(config.ageRating.GAMBLING_CONTESTS ?? 0),
+    gamblingSimulated: ratingValue(config.ageRating.SIMULATED_GAMBLING ?? 0),
+    sexualContentOrNudity: ratingValue(config.ageRating.SEXUAL_CONTENT_NUDITY ?? 0),
+    sexualContentGraphicAndNudity: ratingValue(config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0),
+    unrestrictedWebAccess: config.ageRating.UNRESTRICTED_WEB_ACCESS === 1 || config.ageRating.UNRESTRICTED_WEB_ACCESS === 2,
+    kidsAgeBand: null,
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
