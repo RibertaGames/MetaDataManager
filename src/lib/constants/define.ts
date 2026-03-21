@@ -298,6 +298,14 @@ export const IOS_AGE_RATING: ConfigFieldDef[] = [
     { value: 1, label: "まれ/軽度" },
     { value: 2, label: "頻繁/激しい" },
   ]},
+  { key: "lootBox", label: "ルートボックス（ガチャなど）", type: "boolean", description: "ランダムな報酬を得るための課金要素" },
+  { key: "advertising", label: "広告を表示", type: "boolean", description: "アプリ内で広告を表示する" },
+  { key: "messagingAndChat", label: "メッセージング・チャット機能", type: "boolean", description: "ユーザー間のメッセージング機能" },
+  { key: "ageAssurance", label: "年齢確認機能", type: "boolean", description: "年齢確認・認証機能を含む" },
+  { key: "userGeneratedContent", label: "ユーザー生成コンテンツ", type: "boolean", description: "ユーザーが作成したコンテンツを含む" },
+  { key: "healthOrWellnessTopics", label: "健康・ウェルネス関連", type: "boolean", description: "健康やウェルネスに関する情報を提供" },
+  { key: "parentalControls", label: "ペアレンタルコントロール", type: "boolean", description: "保護者向けの制御機能を含む" },
+  { key: "gunsOrOtherWeapons", label: "銃・武器の描写", type: "boolean", description: "銃や武器の描写を含む" },
 ];
 
 // ============================================

@@ -147,6 +147,15 @@ export function writeIosConfig(
     sexualContentGraphicAndNudity: ratingValue(config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0),
     unrestrictedWebAccess: config.ageRating.UNRESTRICTED_WEB_ACCESS === 1 || config.ageRating.UNRESTRICTED_WEB_ACCESS === 2,
     kidsAgeBand: null,
+    // 新しい必須フィールド（App Store Connect API v2.0+）
+    lootBox: config.ageRating.lootBox ?? false,
+    advertising: config.ageRating.advertising ?? false,
+    messagingAndChat: config.ageRating.messagingAndChat ?? false,
+    ageAssurance: config.ageRating.ageAssurance ?? false,
+    userGeneratedContent: config.ageRating.userGeneratedContent ?? false,
+    healthOrWellnessTopics: config.ageRating.healthOrWellnessTopics ?? false,
+    parentalControls: config.ageRating.parentalControls ?? false,
+    gunsOrOtherWeapons: config.ageRating.gunsOrOtherWeapons ?? false,
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
@@ -238,6 +247,15 @@ export function writeAndroidConfig(
     sexualContentGraphicAndNudity: ratingValue(config.ageRating.GRAPHIC_SEXUAL_CONTENT_NUDITY ?? 0),
     unrestrictedWebAccess: config.ageRating.UNRESTRICTED_WEB_ACCESS === 1 || config.ageRating.UNRESTRICTED_WEB_ACCESS === 2,
     kidsAgeBand: null,
+    // 新しい必須フィールド（App Store Connect API v2.0+）
+    lootBox: config.ageRating.lootBox ?? false,
+    advertising: config.ageRating.advertising ?? false,
+    messagingAndChat: config.ageRating.messagingAndChat ?? false,
+    ageAssurance: config.ageRating.ageAssurance ?? false,
+    userGeneratedContent: config.ageRating.userGeneratedContent ?? false,
+    healthOrWellnessTopics: config.ageRating.healthOrWellnessTopics ?? false,
+    parentalControls: config.ageRating.parentalControls ?? false,
+    gunsOrOtherWeapons: config.ageRating.gunsOrOtherWeapons ?? false,
   };
 
   fs.writeFileSync(ageRatingPath, JSON.stringify(ageRatingData, null, 2), "utf-8");
