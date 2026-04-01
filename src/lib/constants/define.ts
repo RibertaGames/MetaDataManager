@@ -153,11 +153,20 @@ export const IOS_REVIEW_INFO_FIELDS: FieldDef[] = [
  * Android メタデータフィールド
  */
 export const ANDROID_FIELDS: FieldDef[] = [
-  { key: "title",             label: "タイトル",       maxLength: 50,   multiline: false, filePath: "title.txt"             },
-  { key: "short_description", label: "簡単な説明",     maxLength: 80,   multiline: false, filePath: "short_description.txt" },
-  { key: "full_description",  label: "詳細な説明",     maxLength: 4000, multiline: true,  filePath: "full_description.txt"  },
-  { key: "video",             label: "プロモーション動画URL", maxLength: null, multiline: false, filePath: "video.txt"     },
-  { key: "changelog",         label: "変更履歴",       maxLength: 500,  multiline: true,  filePath: "changelogs/default.txt"},
+  { key: "title",             label: "タイトル",               maxLength: 50,   multiline: false, filePath: "title.txt"             },
+  { key: "short_description", label: "簡単な説明",             maxLength: 80,   multiline: false, filePath: "short_description.txt" },
+  { key: "full_description",  label: "詳細な説明",             maxLength: 4000, multiline: true,  filePath: "full_description.txt"  },
+  { key: "video",             label: "プロモーション動画URL",  maxLength: null, multiline: false, filePath: "video.txt"     },
+  { key: "privacy_policy_url", label: "プライバシーポリシーURL", maxLength: null, multiline: false, filePath: "privacy_policy_url.txt" },
+];
+
+/**
+ * Android グローバルフィールド（言語非依存）
+ */
+export const ANDROID_GLOBAL_FIELDS: FieldDef[] = [
+  { key: "contact_website", label: "ウェブサイト",       maxLength: null, multiline: false, filePath: "contact_website.txt" },
+  { key: "contact_email",   label: "連絡先メール",       maxLength: null, multiline: false, filePath: "contact_email.txt"   },
+  { key: "contact_phone",   label: "連絡先電話番号",     maxLength: null, multiline: false, filePath: "contact_phone.txt"   },
 ];
 
 // ============================================
